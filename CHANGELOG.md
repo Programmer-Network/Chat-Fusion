@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- dev dependencie `cfx` in order to add the `copy-static` script in `package.json`
+- dev dependency `cfx` in order to add the `copy-static` script in `package.json`
 - a popup file in the chrome extension to permit the user to directly open the react page. Now the link it's hardcoded  
 <p align="center">
   <img src="./assets/images/popup.png" style="width: 400px;">
