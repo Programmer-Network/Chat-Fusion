@@ -1,0 +1,17 @@
+{
+  "name": "my-chrome-extension",
+  "version": "1.0.0",
+  "scripts": {
+    "build:content": "tsc -p tsconfig.json",
+    "build": "npm run build:content"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.248",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@fastify/cors": "8.4.0",
+    "fastify": "^4.24.3",
+    "fastify-cors": "^6.1.0"
+  }
+}
