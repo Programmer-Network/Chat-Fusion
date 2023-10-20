@@ -7,6 +7,26 @@ interface ISelectorConfig {
 }
 
 /**
+ * Utility used to generate a sessionId.
+ * @param {length} length - The length of the ID to generate.
+ * @returns the generated ID.
+ */
+function makeId(length: number): string {
+  let result = "";
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const charactersLength = characters.length;
+
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(
+      Math.floor(Math.random() * charactersLength)
+    );
+  }
+
+  return result;
+}
+
+/**
  * Retrieves the CSS selectors based on the hostname for a specific platform.
  * @param {string} hostname - The hostname of the website.
  * @returns {object|null} An object containing CSS selectors or null if the hostname is not recognized.
@@ -61,6 +81,7 @@ const getPlatformNameByHostname = (
  * Initializes the content script and sets up chat observers.
  */
 const initContentScript = () => {
+  const sessionId = makeId(10);
   const hostname = window.location.hostname;
   const platform = getPlatformNameByHostname(hostname);
   const config = getSelectorsByPlatform(hostname);
@@ -76,7 +97,6 @@ const initContentScript = () => {
 
       Array.from(mutation.addedNodes).forEach((chatNode) => {
         const isHTMLElement = chatNode instanceof Element;
-
         const content =
           config.chatMessageContentSelector && isHTMLElement
             ? chatNode.querySelector(config.chatMessageContentSelector)
@@ -112,6 +132,7 @@ const initContentScript = () => {
             : "";
 
         const data = {
+          sessionId: sessionId, // id to identify the session of the chrome extension
           id: Math.random().toString(36).substr(2, 9),
           platform,
           content,
@@ -134,11 +155,40 @@ const initContentScript = () => {
       });
     });
   });
+  const setBadgeStatus = (status:boolean) => {
+    chrome.runtime.sendMessage({status: status, type: "badge"}, (response) => {
+      console.log('⚡[Chat Fusion] badge set');
+    });
+    
+  };
+  const loadChat = () => {
+    const chatElement = document.querySelector(config.chatContainerSelector);
+    if (chatElement) {
+      chatObserver.observe(chatElement, { childList: true });
+      return true;
+    }else{
+      return false;
+    }
+  };
 
-  const chatElement = document.querySelector(config.chatContainerSelector);
-  if (chatElement) {
-    chatObserver.observe(chatElement, { childList: true });
-  }
+
+  let retry = 0;
+  const interval = setInterval(() => {
+    if (retry > 3) {
+      clearInterval(interval);
+      console.error('⚠️[Chat Fusion] unable to connect to chat after 3 retries');
+      setBadgeStatus(false);
+
+    }
+    if(loadChat()){
+      clearInterval(interval);
+      console.log('⚡[Chat Fusion] connected');
+      setBadgeStatus(true);
+    }
+    retry++;
+  }, 1000);
+
+  
 };
 
 initContentScript();

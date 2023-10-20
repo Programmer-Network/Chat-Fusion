@@ -1,6 +1,11 @@
 {
   "manifest_version": 3,
   "name": "Chat Fusion",
+  "description": "Chat Fusion for Streamers",
+  "action": {
+    "default_popup": "./dist/popup.html",
+    "default_title": "Chat Fusion"
+  },
   "version": "1.0",
   "host_permissions": ["http://*/*", "https://*/*"],
   "content_scripts": [
@@ -8,5 +13,8 @@
       "matches": ["http://*/*", "https://*/*"],
       "js": ["./dist/index.js"]
     }
-  ]
+  ],
+  "background": {
+    "service_worker": "./dist/background.js"
+ }
 }
