@@ -66,11 +66,11 @@ You have to run the client (React) code and the API (fastify) separetly.
 
 ```bash
 # In one terminal session
-node api/server.js
+pnpm server-dev # to run an api in development mode with live reload using Nodemon
 
 # In another
 cd chat
-pnpm dev
+pnpm dev # to run the chat react app
 ```
 
 **Chrome Extension**
