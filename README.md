@@ -79,6 +79,12 @@ pnpm dev # to run the chat react app
 - Enable `Developer mode` in the top right corner
 - In the top left corner, click on `Load unpacked` and load this very repository into there. Essentially, `manifest.json`, `src` and `dist` are the extension part of this repository.
 
-**Open (Popout) the Chats**
+To ensure that the Chat Fusion Chrome Extension functions correctly, you'll need to open each platform chat in either a new tab or a separate window. This is essential because most streaming platforms, like YouTube, embed their chat interfaces within iframes. Due to browser security constraints, Chrome Content Scripts can only access the DOM of the parent page and not any embedded iframes.
 
-- Open (and for your own sake, minimize) the 3 respective chats (`Popout`), Twith, YouTube and Kick
+Steps to Setup:
+
+- Install the Chat Fusion Chrome Extension.
+- Run the API and client.
+- Open the chat interface of each streaming platform you're broadcasting to in a new tab or window.
+
+By doing this, the content script from the Chrome Extension will have the necessary access to query and traverse the DOM of these chats. This enables it to locate the specific elements required for scraping chat data.
