@@ -3,15 +3,17 @@
   "version": "1.0.0",
   "scripts": {
     "build:content": "tsc -p tsconfig.json",
-    "build": "npm run build:content",
+    "copy-static": "cpx src/ui/* dist",
+    "build": "npm run build:content && npm run copy-static",
     "build-server": "tsc --target ES2018 --module CommonJS --outDir ./api --strict --esModuleInterop api/server.ts",
-    "server-dev": "nodemon --watch 'api/server.ts' --exec 'tsc --target ES2018 --module CommonJS --outDir ./api --strict --esModuleInterop api/server.ts && node ./api/server.js'"
+    "server-dev": "nodemon --watch 'api/server.ts' --exec \"tsc --target ES2018 --module CommonJS --outDir ./api --strict --esModuleInterop api/server.ts && node ./api/server.js\""
   },
   "devDependencies": {
     "@types/chrome": "^0.0.248",
     "@types/node": "^20.8.7",
-    "typescript": "^5.2.2",
-    "nodemon": "^2.0.15"
+    "cpx": "^1.5.0",
+    "nodemon": "^2.0.15",
+    "typescript": "^5.2.2"
   },
   "dependencies": {
     "@fastify/cors": "8.4.0",

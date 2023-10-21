@@ -60,6 +60,9 @@ By offering a consistent, user-friendly interface, Chat Fusion makes managing an
 ```bash
 pnpm i
 pnpm build # to build the chrome extension
+
+cd chat
+pnpm i # to install the dependencies for the chat
 ```
 
 You have to run the client (React) code and the API (fastify) separetly.
