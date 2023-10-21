@@ -8,7 +8,7 @@ export const Message: FC<{
   onMessageClick: (message: IMessage) => void;
   focusedMessage: IMessage | null;
 }> = ({ message, focusedMessage, onMessageClick }) => {
-  const { content, author } = message;
+  const { content, author, badges } = message;
 
   const handleSaveMessage = (message: IMessage) => {
     fetch("http://localhost:3000/api/save-message", {
@@ -75,6 +75,19 @@ export const Message: FC<{
             }
           )}
         >
+          <span>
+            {badges?.length > 0 &&
+              badges?.map((badge) => {
+                return (
+                  <img
+                    className="inline-block w-8 h-8 p-1"
+                    src={badge}
+                    alt="badge"
+                  />
+                );
+              })}
+          </span>
+
           {author}
         </div>
         <div

@@ -13,7 +13,7 @@ export interface IMessage {
   content: string;
   emojis: string[];
   author: string;
-  badge: string;
+  badges: string[];
 }
 
 const server: FastifyInstance = fastify({ logger: true });
@@ -29,7 +29,10 @@ server.post(
   "/api/messages",
   async (request: FastifyRequest, reply: FastifyReply) => {
     const message = request.body as IMessage;
-    if (messages.length > 0 && messages[messages.length - 1].sessionId !== message.sessionId) {
+    if (
+      messages.length > 0 &&
+      messages[messages.length - 1].sessionId !== message.sessionId
+    ) {
       // new session, add system message
       messages.push({
         sessionId: message.sessionId,
@@ -38,7 +41,7 @@ server.post(
         content: "Chat reload",
         author: "System",
         emojis: [],
-        badge: "",
+        badges: [],
       });
     }
     messages.push(message);
@@ -47,7 +50,6 @@ server.post(
 );
 
 server.get("/api/messages", async (_: FastifyRequest, reply: FastifyReply) => {
-
   reply.send(messages);
 });
 

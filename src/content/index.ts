@@ -38,7 +38,7 @@ function getSelectorsByPlatform(
         chatContainerSelector: ".chat-scrollable-area__message-container",
         chatMessageAuthorSelector:
           ".chat-line__message .chat-author__display-name",
-        chatMessageAuthorBadgeSelector: ".chat-line__message .chat-badge",
+        chatMessageAuthorBadgeSelector: ".chat-badge",
         chatMessageContentSelector: ".chat-line__message .text-fragment",
         chatImageContainer: ".chat-line__message img:not(.chat-badge)",
       },
@@ -130,14 +130,26 @@ const initContentScript = () => {
                 ?.textContent
             : "";
 
-        const badge =
-          config.chatMessageAuthorBadgeSelector && isHTMLElement
-            ? (
-                chatNode.querySelector(
-                  config.chatMessageAuthorBadgeSelector
-                ) as HTMLImageElement
-              )?.src
-            : "";
+        // const badge =
+        //   config.chatMessageAuthorBadgeSelector && isHTMLElement
+        //     ? (
+        //         chatNode.querySelector(
+        //           config.chatMessageAuthorBadgeSelector
+        //         ) as HTMLImageElement
+        //       )?.src
+        //     : "";
+
+        let badges: string[] = [];
+        if (platform === "twitch") {
+          badges =
+            config.chatMessageAuthorBadgeSelector && isHTMLElement
+              ? Array.from(
+                  chatNode.querySelectorAll(
+                    config.chatMessageAuthorBadgeSelector
+                  ) as NodeListOf<HTMLImageElement>
+                ).map((img) => img.src)
+              : [];
+        }
 
         const data = {
           sessionId: sessionId, // id to identify the session of the chrome extension
@@ -146,7 +158,7 @@ const initContentScript = () => {
           content,
           emojis,
           author,
-          badge,
+          badges,
         };
         if (!content) {
           return;
