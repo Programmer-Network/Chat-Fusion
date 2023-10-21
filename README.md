@@ -99,7 +99,7 @@ If you're working on the UI and need to see how it interacts with messages, you 
 **Setting in the `src/.env` file:**
 
 ```env
-VITE_USE_DUMMY_DATA=true
+VITE_USE_DUMMY_DATA="true"
 ```
 
 Once this flag is set to `"true"`, the app will switch to using the `useMessageListenerDev` hook instead of the `useMessageListenerProd` hook. This will generate fake messages at regular intervals, allowing you to test the UI without requiring a backend service for messages.
