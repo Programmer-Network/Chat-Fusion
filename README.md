@@ -91,3 +91,15 @@ Steps to Setup:
 - Open the chat interface of each streaming platform you're broadcasting to in a new tab or window.
 
 By doing this, the content script from the Chrome Extension will have the necessary access to query and traverse the DOM of these chats. This enables it to locate the specific elements required for scraping chat data.
+
+### Using Fake Generated Messages for UI Development
+
+If you're working on the UI and need to see how it interacts with messages, you have the option to enable the generation of fake messages. You can set the `VITE_USE_DUMMY_DATA` environment variable to `"true"` either by exporting it in your terminal or by adding it to your `src/.env` file:
+
+**Setting in the `src/.env` file:**
+
+```env
+VITE_USE_DUMMY_DATA=true
+```
+
+Once this flag is set to `"true"`, the app will switch to using the `useMessageListenerDev` hook instead of the `useMessageListenerProd` hook. This will generate fake messages at regular intervals, allowing you to test the UI without requiring a backend service for messages.
