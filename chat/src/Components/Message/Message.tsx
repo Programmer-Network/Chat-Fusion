@@ -1,9 +1,6 @@
 import { FC } from "react";
 import { IMessage } from "../../types";
 import classNames from "classnames";
-import { TwitchIcon } from "../../assets/Icons/Twitch";
-import { YouTubeIcon } from "../../assets/Icons/YouTube";
-import { KickIcon } from "../../assets/Icons/Kick";
 import { SaveIcon } from "../../assets/Icons/Save";
 
 export const Message: FC<{
@@ -11,19 +8,7 @@ export const Message: FC<{
   onMessageClick: (message: IMessage) => void;
   focusedMessage: IMessage | null;
 }> = ({ message, focusedMessage, onMessageClick }) => {
-  const { platform, content, emojis, author } = message;
-  const getIconByPlatform = (platform: string) => {
-    switch (platform) {
-      case "twitch":
-        return <TwitchIcon />;
-      case "youtube":
-        return <YouTubeIcon />;
-      case "kick":
-        return <KickIcon />;
-      default:
-        return null;
-    }
-  };
+  const { content, author } = message;
 
   const handleSaveMessage = (message: IMessage) => {
     fetch("http://localhost:3000/api/save-message", {
@@ -39,9 +24,9 @@ export const Message: FC<{
     <div
       onClick={() => onMessageClick(message)}
       className={classNames(
-        "mb-2 flex flex-col cursor-pointer relative border border-gray-500 p-8",
+        "flex flex-col cursor-pointer relative border-l-4 border-dotted border-gray-500 px-4 py-2",
         {
-          "px-16 py-16 w-4/12 border-2":
+          "px-16 py-16 w-4/12 border-8 border-l-8":
             focusedMessage && focusedMessage.id === message.id,
           hidden: focusedMessage && focusedMessage.id !== message.id,
           "border-indigo-700": message.platform === "twitch",
@@ -50,12 +35,39 @@ export const Message: FC<{
         }
       )}
     >
-      <div className="flex items-center">
-        <span
+      <div
+        className={classNames("flex items-center gap-2", {
+          "flex-col !items-start !justify-start p-4": focusedMessage,
+        })}
+      >
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            handleSaveMessage(message);
+          }}
+        >
+          <div
+            className={classNames({
+              "text-indigo-700 hover:text-indigo-500":
+                message.platform === "twitch",
+              "text-rose-700 hover:text-rose-500":
+                message.platform === "youtube",
+              "text-green-700 hover:text-green-500":
+                message.platform === "kick",
+            })}
+          >
+            <SaveIcon
+              className={classNames("w-4", {
+                "!w-8": focusedMessage,
+              })}
+            />
+          </div>
+        </div>
+        <div
           className={classNames(
             "font-bold flex items-center gap-2 justify-center text-xl",
             {
-              "text-6xl uppercase":
+              "!text-4xl uppercase italic tracking-tight":
                 focusedMessage && focusedMessage.id === message.id,
               "text-indigo-700": message.platform === "twitch",
               "text-rose-700": message.platform === "youtube",
@@ -63,52 +75,18 @@ export const Message: FC<{
             }
           )}
         >
-          <span
-            className={classNames("w-12", {
-              "absolute top-3 left-3 w-12":
-                focusedMessage && focusedMessage.id === message.id,
-              "text-indigo-700": message.platform === "twitch",
-              "text-rose-700": message.platform === "youtube",
-              "text-green-700": message.platform === "kick",
-            })}
-          >
-            {getIconByPlatform(platform)}
-          </span>
           {author}
-        </span>
-      </div>
-      <p
-        className={classNames(
-          "text-gray-300 text-2xl flex items-center gap-2",
-          {
-            "text-gray-500 text-4xl":
-              focusedMessage && focusedMessage.id === message.id,
-          }
-        )}
-      >
-        {content}
-        {emojis.map((emoji: string, index: number) => (
-          <span key={index} className="flex gap-2 items-center">
-            <img className="w-24" src={emoji} />
-          </span>
-        ))}
-      </p>
-      <div
-        className="mx-auto absolute top-2 right-2"
-        onClick={(e) => {
-          e.stopPropagation();
-          handleSaveMessage(message);
-        }}
-      >
+        </div>
         <div
-          className={classNames({
-            "text-indigo-700 hover:text-indigo-500":
-              message.platform === "twitch",
-            "text-rose-700 hover:text-rose-500": message.platform === "youtube",
-            "text-green-700 hover:text-green-500": message.platform === "kick",
-          })}
+          className={classNames(
+            "text-gray-300 text-2xl flex items-center gap-2",
+            {
+              "text-gray-500 text-4xl":
+                focusedMessage && focusedMessage.id === message.id,
+            }
+          )}
         >
-          <SaveIcon className="w-8" />
+          {content}
         </div>
       </div>
     </div>
