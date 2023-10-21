@@ -51,6 +51,15 @@ function getSelectorsByPlatform(
           ".yt-live-chat-text-message-renderer #message",
         chatImageContainer: ".emoji",
       },
+      "kick.com": {
+        chatContainerSelector:
+          "#chatroom > div.relative.flex.grow.flex-col.overflow-hidden > div.overflow-y-scroll.py-3",
+        chatMessageAuthorSelector:
+          "#chatroom .chat-message-identity .chat-entry-username",
+        chatMessageAuthorBadgeSelector: "",
+        chatMessageContentSelector: "#chatroom .chat-entry-content",
+        chatImageContainer: "",
+      },
     }[hostname];
   } catch (_) {
     return null;
@@ -69,6 +78,7 @@ const getPlatformNameByHostname = (
     return {
       "www.twitch.tv": "twitch",
       "www.youtube.com": "youtube",
+      "kick.com": "kick",
     }[hostname];
   } catch (_) {
     return null;
@@ -138,7 +148,6 @@ const initContentScript = () => {
           author,
           badge,
         };
-
         if (!content) {
           return;
         }
