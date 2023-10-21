@@ -9,6 +9,7 @@
     "server-dev": "nodemon --watch 'api/server.ts' --exec \"tsc --target ES2018 --module CommonJS --outDir ./api --strict --esModuleInterop api/server.ts && node ./api/server.js\""
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.2.0",
     "@types/chrome": "^0.0.248",
     "@types/node": "^20.8.7",
     "cpx": "^1.5.0",
@@ -17,6 +18,7 @@
   },
   "dependencies": {
     "@fastify/cors": "8.4.0",
+    "faker": "link:@types@faker-js/faker",
     "fastify": "^4.24.3",
     "fastify-cors": "^6.1.0"
   }
