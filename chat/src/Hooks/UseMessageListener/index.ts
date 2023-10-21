@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { IMessage } from "../../types";
+import DummyMessageGenerator from "../../utils/faker";
 
-export const useMessageListener = (): IMessage[] => {
+const useMessageListenerProd = (): IMessage[] => {
   const [messages, setMessages] = useState<IMessage[]>([]);
   let intervalId: ReturnType<typeof setInterval> | null = null;
 
@@ -38,3 +39,25 @@ export const useMessageListener = (): IMessage[] => {
 
   return messages;
 };
+
+const useMessageListenerDev = (): IMessage[] => {
+  const [messages, setMessages] = useState<IMessage[]>([]);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const newMessage = DummyMessageGenerator.generate();
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  return messages;
+};
+
+export const useMessageListener =
+  import.meta.env.VITE_USE_DUMMY_DATA === "true"
+    ? useMessageListenerDev
+    : useMessageListenerProd;
