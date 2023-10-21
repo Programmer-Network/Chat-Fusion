@@ -14,7 +14,7 @@ export interface IMessage {
     content: string;
     emojis: string[];
     author: string;
-    badge: string;
+    badges: string[];
     authorColor: string;
 }
 
@@ -42,7 +42,7 @@ server.post(
                 content: "Chat reload",
                 author: "System",
                 emojis: [],
-                badge: "",
+                badges: [],
                 authorColor: "text-indigo-500",
             });
         }
