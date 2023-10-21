@@ -3,7 +3,7 @@ import { IMessage } from "../../types";
 
 export const useMessageListener = (): IMessage[] => {
   const [messages, setMessages] = useState<IMessage[]>([]);
-  let intervalId: number | null = null;
+  let intervalId: ReturnType<typeof setInterval> | null = null;
 
   const fetchMessages = async () => {
     const res = await fetch("http://localhost:3000/api/messages");
@@ -31,6 +31,7 @@ export const useMessageListener = (): IMessage[] => {
       if (intervalId) {
         clearInterval(intervalId);
       }
+
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, []);

@@ -18,9 +18,7 @@ function makeId(length: number): string {
   const charactersLength = characters.length;
 
   for (let i = 0; i < length; i++) {
-    result += characters.charAt(
-      Math.floor(Math.random() * charactersLength)
-    );
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
 
   return result;
@@ -155,40 +153,34 @@ const initContentScript = () => {
       });
     });
   });
-  const setBadgeStatus = (status:boolean) => {
-    chrome.runtime.sendMessage({status: status, type: "badge"}, (response) => {
-      console.log('⚡[Chat Fusion] badge set');
-    });
-    
+
+  const setBadgeStatus = (status: boolean) => {
+    chrome.runtime.sendMessage({ status: status, type: "badge" });
   };
+
   const loadChat = () => {
     const chatElement = document.querySelector(config.chatContainerSelector);
     if (chatElement) {
       chatObserver.observe(chatElement, { childList: true });
       return true;
-    }else{
+    } else {
       return false;
     }
   };
-
 
   let retry = 0;
   const interval = setInterval(() => {
     if (retry > 3) {
       clearInterval(interval);
-      console.error('⚠️[Chat Fusion] unable to connect to chat after 3 retries');
       setBadgeStatus(false);
-
     }
-    if(loadChat()){
+
+    if (loadChat()) {
       clearInterval(interval);
-      console.log('⚡[Chat Fusion] connected');
       setBadgeStatus(true);
     }
     retry++;
   }, 1000);
-
-  
 };
 
 initContentScript();

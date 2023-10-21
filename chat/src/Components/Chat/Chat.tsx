@@ -3,6 +3,7 @@ import { IMessage } from "../../types";
 import { Message } from "../Message";
 import classNames from "classnames";
 import { ChatDivider } from "../ChatDivider";
+import { ReloadIcon } from "../../assets/Icons/Reload";
 
 export const Chat: FC<{
   messages: IMessage[];
@@ -21,36 +22,16 @@ export const Chat: FC<{
     }
   };
 
-  const mapMessages = () => {
-    return messages.map((message: IMessage, index: number) => {
-      if (message.author.toLocaleLowerCase() === "system") {
-        return (
-            <ChatDivider message={message} />
-        );
-      } else {
-        return (
-          <Message
-            key={index}
-            message={message}
-            focusedMessage={focusedMessage}
-            onMessageClick={handleFocusMessage}
-          />
-        );
-      }
-    });
-  };
-
   useEffect(() => {
-    if (autoScroll) {
-      scrollToBottom();
+    if (!autoScroll) {
+      return;
     }
+
+    scrollToBottom();
   }, [messages, autoScroll]);
 
   return (
     <>
-      <div className="fixed bottom-0 left-0 right-0 h-10 w-full text-center text-white bg-slate-700">
-        Autoreload { autoScroll ? (<span className="text-green-700">ON</span>) : (<span className="text-red-700">OFF</span>)} <button className="bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded" onClick={() => setAutoScroll(!autoScroll)}>Toggle</button>
-      </div>
       <div className="w-full p-12 flex-grow">
         <div
           className={classNames("flex flex-col gap-2", {
@@ -58,10 +39,36 @@ export const Chat: FC<{
               focusedMessage,
           })}
         >
-          {mapMessages()}
+          {messages.map((message: IMessage, index: number) => {
+            if (
+              message.author.toLocaleLowerCase() === "system" &&
+              !focusedMessage
+            ) {
+              return <ChatDivider message={message} />;
+            }
+
+            return (
+              <Message
+                key={index}
+                message={message}
+                focusedMessage={focusedMessage}
+                onMessageClick={handleFocusMessage}
+              />
+            );
+          })}
           <div ref={messagesEndRef}></div>
         </div>
       </div>
+      {!focusedMessage && (
+        <div className="flex items-center justify-center pb-8">
+          <ReloadIcon
+            onClick={() => setAutoScroll(!autoScroll)}
+            className={classNames("w-12 text-gray-500 cursor-pointer", {
+              "animate-spin !text-green-500": autoScroll,
+            })}
+          />
+        </div>
+      )}
     </>
   );
 };

@@ -39,7 +39,7 @@ export const Message: FC<{
     <div
       onClick={() => onMessageClick(message)}
       className={classNames(
-        "mb-2 flex flex-col cursor-pointer relative border border-gray-500 p-4",
+        "mb-2 flex flex-col cursor-pointer relative border border-gray-500 p-8",
         {
           "px-16 py-16 w-4/12 border-2":
             focusedMessage && focusedMessage.id === message.id,
@@ -79,7 +79,7 @@ export const Message: FC<{
       </div>
       <p
         className={classNames(
-          "text-gray-400 text-2xl flex items-center gap-2",
+          "text-gray-300 text-2xl flex items-center gap-2",
           {
             "text-gray-500 text-4xl":
               focusedMessage && focusedMessage.id === message.id,
@@ -94,7 +94,7 @@ export const Message: FC<{
         ))}
       </p>
       <div
-        className="mx-auto mt-8 absolute bottom-2 right-2"
+        className="mx-auto absolute top-2 right-2"
         onClick={(e) => {
           e.stopPropagation();
           handleSaveMessage(message);
