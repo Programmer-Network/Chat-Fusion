@@ -76,10 +76,11 @@ export const Message: FC<{
           )}
         >
           <span>
-            {badges?.length > 0 &&
-              badges?.map((badge) => {
+            {badges.length > 0 &&
+              badges.map((badge, index) => {
                 return (
                   <img
+                    key={index}
                     className="inline-block w-8 h-8 p-1"
                     src={badge}
                     alt="badge"
