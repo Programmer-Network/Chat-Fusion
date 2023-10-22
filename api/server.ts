@@ -80,6 +80,52 @@ server.post(
     }
 );
 
+server.post(
+    "/api/save-messages/links",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+        const message = request.body as IMessage;
+
+        const EXCLUDED_AUTHORS = [
+            "StreamElements",
+            "Streamlabs",
+            "Nightbot",
+            "Streamlabs",
+            "Programmer_Network",
+        ];
+
+        if (EXCLUDED_AUTHORS.includes(message.author)) {
+            return;
+        }
+        try {
+            fs.readFile("links.json", "utf8", (err, data) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    // Parse the file content to an array
+                    const messages = JSON.parse(data || "[]");
+
+                    messages.push(message);
+
+                    fs.writeFile(
+                        "links.json",
+                        JSON.stringify(messages),
+                        "utf8",
+                        (err) => {
+                            if (err) {
+                                console.log(err);
+                            }
+                        }
+                    );
+                }
+            });
+        } catch (err) {
+            console.log(err);
+        }
+
+        reply.send(savedMessages);
+    }
+);
+
 const start = async () => {
     try {
         await server.listen({

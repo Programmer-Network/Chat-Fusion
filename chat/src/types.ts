@@ -4,6 +4,6 @@ export interface IMessage {
     content: string;
     emojis: string[];
     author: string;
-    badge: string[];
+    badges: string[];
     authorColor: string;
 }
