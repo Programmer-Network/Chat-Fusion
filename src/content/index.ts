@@ -130,15 +130,6 @@ const initContentScript = () => {
                 ?.textContent
             : "";
 
-        // const badge =
-        //   config.chatMessageAuthorBadgeSelector && isHTMLElement
-        //     ? (
-        //         chatNode.querySelector(
-        //           config.chatMessageAuthorBadgeSelector
-        //         ) as HTMLImageElement
-        //       )?.src
-        //     : "";
-
         let badges: string[] = [];
         if (platform === "twitch") {
           badges =
