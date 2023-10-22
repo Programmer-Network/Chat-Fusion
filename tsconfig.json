@@ -1,12 +1,15 @@
 {
-  "compilerOptions": {
-    "target": "ES2020",
-    "module": "CommonJS",
-    "outDir": "./dist",
-    "strict": true,
-    "esModuleInterop": true,
-    "types": ["chrome"]
-  },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "chat/**/*"]
+    "compilerOptions": {
+        "target": "ES6", // Target es6+ features
+        "module": "commonjs", // Use commonjs modules
+        "outDir": "./dist", // Output directory for compiled files
+        "rootDir": "./src", // Root directory for source files
+        "strict": true, // Enable strict checks
+        "esModuleInterop": true, // Enables CommonJS/AMD/UMD style interoperability
+        "moduleResolution": "node", // Module resolution strategy
+        "sourceMap": true,
+        "lib": ["DOM", "ES2015", "ES2017"]
+    },
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules", "chat/**/*"]
 }

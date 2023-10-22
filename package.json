@@ -1,25 +1,24 @@
 {
-  "name": "chat-fusion",
-  "version": "1.0.0",
-  "scripts": {
-    "build:content": "tsc -p tsconfig.json",
-    "copy-static": "cpx ./src/ui/*.{svg,png,html} dist",
-    "build": "npm run build:content && npm run copy-static",
-    "build-server": "tsc --target ES2018 --module CommonJS --outDir ./api --strict --esModuleInterop api/server.ts",
-    "server-dev": "nodemon --watch 'api/server.ts' --exec \"tsc --target ES2018 --module CommonJS --outDir ./api --strict --esModuleInterop api/server.ts && node ./api/server.js\""
-  },
-  "devDependencies": {
-    "@faker-js/faker": "^8.2.0",
-    "@types/chrome": "^0.0.248",
-    "@types/node": "^20.8.7",
-    "faker": "@faker-js/faker",
-    "cpx": "^1.5.0",
-    "nodemon": "^2.0.15",
-    "typescript": "^5.2.2"
-  },
-  "dependencies": {
-    "@fastify/cors": "8.4.0",
-    "fastify": "^4.24.3",
-    "fastify-cors": "^6.1.0"
-  }
+    "name": "chat-fusion",
+    "version": "1.0.0",
+    "scripts": {
+        "build": "vite build && cpx ./src/popup/*.{svg,png,html} dist",
+        "build-server": "tsc --target ES2018 --module CommonJS --outDir ./api --strict --esModuleInterop api/server.ts",
+        "server-dev": "nodemon --watch 'api/server.ts' --exec \"tsc --target ES2018 --module CommonJS --outDir ./api --strict --esModuleInterop api/server.ts && node ./api/server.js\""
+    },
+    "devDependencies": {
+        "@faker-js/faker": "^8.2.0",
+        "@types/chrome": "^0.0.248",
+        "@types/node": "^20.8.7",
+        "cpx": "^1.5.0",
+        "faker": "@faker-js/faker",
+        "nodemon": "^2.0.15",
+        "typescript": "^5.2.2",
+        "vite": "^4.5.0"
+    },
+    "dependencies": {
+        "@fastify/cors": "8.4.0",
+        "fastify": "^4.24.3",
+        "fastify-cors": "^6.1.0"
+    }
 }
