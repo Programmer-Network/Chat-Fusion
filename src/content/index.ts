@@ -38,7 +38,7 @@ function getSelectorsByPlatform(
         chatContainerSelector: ".chat-scrollable-area__message-container",
         chatMessageAuthorSelector:
           ".chat-line__message .chat-author__display-name",
-        chatMessageAuthorBadgeSelector: "chat-line__message .chat-badge",
+        chatMessageAuthorBadgeSelector: ".chat-line__message .chat-badge",
         chatMessageContentSelector: ".chat-line__message .text-fragment",
         chatImageContainer: ".chat-line__message img:not(.chat-badge)",
       },
