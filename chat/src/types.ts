@@ -5,4 +5,5 @@ export interface IMessage {
   emojis: string[];
   author: string;
   badges: string[];
+  link: string;
 }
