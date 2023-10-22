@@ -130,17 +130,16 @@ const initContentScript = () => {
                 ?.textContent
             : "";
 
-        let badges: string[] = [];
-        if (platform === "twitch") {
-          badges =
-            config.chatMessageAuthorBadgeSelector && isHTMLElement
-              ? Array.from(
-                  chatNode.querySelectorAll(
-                    config.chatMessageAuthorBadgeSelector
-                  ) as NodeListOf<HTMLImageElement>
-                ).map((img) => img.src)
-              : [];
-        }
+        const badges: string[] =
+          platform === "twitch" &&
+          config.chatMessageAuthorBadgeSelector &&
+          isHTMLElement
+            ? Array.from(
+                chatNode.querySelectorAll(
+                  config.chatMessageAuthorBadgeSelector
+                ) as NodeListOf<HTMLImageElement>
+              ).map((img) => img.src)
+            : [];
 
         const data = {
           sessionId: sessionId, // id to identify the session of the chrome extension
