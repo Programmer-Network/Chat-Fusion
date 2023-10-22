@@ -8,9 +8,12 @@ export const Chat: FC<{
     messages: IMessage[];
     focusedMessage: IMessage | null;
     setFocusedMessage: (message: IMessage | null) => void;
-}> = ({ messages, focusedMessage, setFocusedMessage }) => {
+    onAction: (action: string, data: unknown) => void;
+    filter: string;
+}> = ({ messages, focusedMessage, setFocusedMessage, onAction, filter }) => {
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const [autoScroll, setAutoScroll] = useState<boolean>(true);
+
     const handleFocusMessage = (message: IMessage) => {
         setFocusedMessage(message.id === focusedMessage?.id ? null : message);
     };
@@ -43,8 +46,10 @@ export const Chat: FC<{
                             <Message
                                 key={index}
                                 message={message}
+                                filter={filter}
                                 focusedMessage={focusedMessage}
                                 onMessageClick={handleFocusMessage}
+                                onAction={onAction}
                             />
                         );
                     })}

@@ -1,14 +1,19 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { IMessage } from "../../types";
 import classNames from "classnames";
 import { SaveIcon } from "../../assets/Icons/Save";
+import { FilterToggle } from "../FilterToggle/FilterToggle";
 
 export const Message: FC<{
     message: IMessage;
+    filter: string;
     onMessageClick: (message: IMessage) => void;
+    onAction: (action: string, message: unknown) => void;
     focusedMessage: IMessage | null;
-}> = ({ message, focusedMessage, onMessageClick }) => {
+}> = ({ message, focusedMessage, onMessageClick, onAction, filter }) => {
     const { content, author } = message;
+    const [hoveredId, setHoveredId] = useState<string>("");
+
     const handleSaveMessage = (message: IMessage) => {
         fetch("http://localhost:3000/api/save-message", {
             method: "POST",
@@ -19,9 +24,13 @@ export const Message: FC<{
         });
     };
 
+    const isHovered = hoveredId === message.id;
+
     return (
         <div
             onClick={() => onMessageClick(message)}
+            onMouseOver={() => setHoveredId(message.id)}
+            onMouseLeave={() => setHoveredId("")}
             className={classNames(
                 "flex flex-col cursor-pointer relative border-l-4 border-dotted border-gray-500 px-4 py-2",
                 {
@@ -40,29 +49,6 @@ export const Message: FC<{
                 })}
             >
                 <div
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        handleSaveMessage(message);
-                    }}
-                >
-                    <div
-                        className={classNames({
-                            "text-indigo-700 hover:text-indigo-500":
-                                message.platform === "twitch",
-                            "text-rose-700 hover:text-rose-500":
-                                message.platform === "youtube",
-                            "text-green-700 hover:text-green-500":
-                                message.platform === "kick",
-                        })}
-                    >
-                        <SaveIcon
-                            className={classNames("w-4", {
-                                "!w-8": focusedMessage,
-                            })}
-                        />
-                    </div>
-                </div>
-                <div
                     style={{ color: message.authorColor }}
                     className={classNames(
                         "font-bold flex items-center gap-2 justify-center text-xl",
@@ -74,6 +60,28 @@ export const Message: FC<{
                     )}
                 >
                     {author}
+                    {isHovered && (
+                        <div className="flex gap-1 items-center">
+                            <div
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleSaveMessage(message);
+                                }}
+                            >
+                                <div className={classNames({})}>
+                                    <SaveIcon
+                                        className={classNames("w-6", {
+                                            "!w-8": focusedMessage,
+                                        })}
+                                    />
+                                </div>
+                            </div>
+                            <FilterToggle
+                                filter={filter}
+                                onToggle={() => onAction("filter", message)}
+                            />
+                        </div>
+                    )}
                 </div>
                 <div
                     className={classNames(

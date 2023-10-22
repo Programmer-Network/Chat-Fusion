@@ -71,9 +71,6 @@ export default class WebRTCUtils {
                 sendChannel.onclose = this.handleClose;
                 sendChannel.onopen = (e) => {
                     sendChannel.send("CONNECTED");
-                    console.log(
-                        "Data channel is open and initial message sent."
-                    );
                 };
 
                 local.onicecandidate = async ({ candidate }) => {

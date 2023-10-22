@@ -19,7 +19,6 @@ export interface IMessage {
 }
 
 const server: FastifyInstance = fastify({ logger: true });
-
 const messages: IMessage[] = [];
 const savedMessages: IMessage[] = [];
 const userColors: { [key: string]: string } = {};
