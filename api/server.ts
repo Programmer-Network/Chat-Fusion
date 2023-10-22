@@ -88,6 +88,13 @@ server.post(
         if (EXCLUDED_AUTHORS.includes(message.author)) {
             return;
         }
+
+        const filePath = "links.json";
+
+        if (!fs.existsSync(filePath)) {
+            fs.writeFileSync(filePath, "[]", "utf8");
+        }
+
         try {
             fs.readFile("links.json", "utf8", (err, data) => {
                 if (err) {
