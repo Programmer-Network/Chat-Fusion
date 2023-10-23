@@ -94,10 +94,6 @@ export default class DOMUtils {
       return [];
     }
 
-    // return (
-    //   node.querySelector(this.selectors.messageAuthorBadge) as HTMLImageElement
-    // )?.src;
-
     return (
       Array.from(
         node.querySelectorAll(
