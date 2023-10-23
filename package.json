@@ -34,6 +34,7 @@
     "devDependencies": {
         "@faker-js/faker": "^8.2.0",
         "@types/chrome": "^0.0.248",
+        "@types/linkify-it": "^3.0.4",
         "@types/node": "^20.8.7",
         "@typescript-eslint/eslint-plugin": "^6.9.0",
         "@typescript-eslint/parser": "^6.9.0",
@@ -51,6 +52,7 @@
     "dependencies": {
         "@fastify/cors": "8.4.0",
         "fastify": "^4.24.3",
-        "fastify-cors": "^6.1.0"
+        "fastify-cors": "^6.1.0",
+        "linkify-it": "^4.0.1"
     }
 }

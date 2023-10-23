@@ -4,4 +4,5 @@ pnpm-lock.yaml
 .todo
 .env
 messages.json
+links.json
 api/*.js

@@ -1,3 +1,11 @@
+import fs from "fs";
+import Linkify from "linkify-it";
+import { promisify } from "util";
+
+const readFileAsync = promisify(fs.readFile);
+const writeFileAsync = promisify(fs.writeFile);
+const linkify = Linkify();
+
 const hexColors = [
     "#F43F5E",
     "#F87171",
@@ -52,4 +60,25 @@ const hexColors = [
 export const getRandomHexColor = (): string => {
     const randomIndex = Math.floor(Math.random() * hexColors.length);
     return hexColors[randomIndex];
+};
+
+export const parseLinks = (content: string): string[] => {
+    const matches = linkify.match(content);
+
+    return matches ? matches.map((match: { url: string }) => match.url) : [];
+};
+
+export const saveLinks = async (newLinks: string[]): Promise<void> => {
+    try {
+        const links = JSON.parse(
+            await readFileAsync("links.json", "utf-8")
+        ) as string;
+
+        await writeFileAsync(
+            "links.json",
+            JSON.stringify([...new Set([...links, ...newLinks])])
+        );
+    } catch (err) {
+        console.error(err);
+    }
 };

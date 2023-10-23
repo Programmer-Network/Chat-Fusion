@@ -5,7 +5,7 @@ import fastify, {
 } from "fastify";
 import cors from "@fastify/cors";
 import fs from "fs";
-import { getRandomHexColor } from "./utils";
+import { getRandomHexColor, parseLinks, saveLinks } from "./utils";
 
 export interface IMessage {
     sessionId: string;
@@ -49,6 +49,11 @@ server.post(
 
         if (!userColors[message.author]) {
             userColors[message.author] = getRandomHexColor();
+        }
+
+        const links = parseLinks(message.content);
+        if (links.length > 0) {
+            await saveLinks(links);
         }
 
         messages.push({

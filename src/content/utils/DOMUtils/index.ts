@@ -25,7 +25,8 @@ export default class DOMUtils {
                 chatContainer: ".chat-scrollable-area__message-container",
                 messageAuthor: ".chat-line__message .chat-author__display-name",
                 messageAuthorBadge: ".chat-line__message .chat-badge",
-                messageText: ".chat-line__message .text-fragment",
+                messageText:
+                    ".chat-line__message [data-a-target='chat-line-message-body']",
                 chatEmojis: ".chat-line__message img:not(.chat-badge)",
             },
             "www.youtube.com": {
@@ -58,14 +59,20 @@ export default class DOMUtils {
         return document.querySelector(this.selectors.chatContainer);
     }
 
-    getMessageText(node: Element) {
+    getMessageText(node: Element): string {
         if (!this.selectors.messageText) {
             return "";
         }
 
-        return (
-            node.querySelector(this.selectors.messageText)?.textContent || ""
-        );
+        const selectedNode = node.querySelector(
+            this.selectors.messageText
+        ) as HTMLElement;
+
+        if (!selectedNode) {
+            return "";
+        }
+
+        return selectedNode.innerText || "";
     }
 
     getMessageEmojis(node: Element) {
