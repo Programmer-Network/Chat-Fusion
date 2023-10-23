@@ -6,7 +6,7 @@
         "build-server": "tsc --target ES2018 --module CommonJS --outDir ./api --strict --esModuleInterop api/server.ts",
         "server-dev": "nodemon --watch 'api/server.ts' --exec \"tsc --target ES2018 --module CommonJS --outDir ./api --strict --esModuleInterop api/server.ts && node ./api/server.js\"",
         "lint": "eslint 'src/**/*.ts' 'api/**/*.ts' 'chat/**/*.{ts,tsx}' --quiet",
-        "format": "prettier --write '**/*.{ts,json}'",
+        "format": "prettier --write '**/*.{ts,tsx,html,json}'",
         "prepare": "husky install"
     },
     "lint-staged": {
