@@ -53,7 +53,7 @@ export default class ChatLoader {
                         content,
                         emojis: this.domUtils.getMessageEmojis(chatNode),
                         author: this.domUtils.getMessageAuthor(chatNode),
-                        badge: this.domUtils.getMessageBadges(chatNode),
+                        badges: this.domUtils.getMessageBadges(chatNode),
                     });
                 });
             });

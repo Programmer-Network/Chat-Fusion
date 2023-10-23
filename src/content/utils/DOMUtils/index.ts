@@ -91,11 +91,20 @@ export default class DOMUtils {
 
   getMessageBadges(node: Element) {
     if (!this.selectors.messageAuthorBadge) {
-      return "";
+      return [];
     }
 
+    // return (
+    //   node.querySelector(this.selectors.messageAuthorBadge) as HTMLImageElement
+    // )?.src;
+
     return (
-      node.querySelector(this.selectors.messageAuthorBadge) as HTMLImageElement
-    )?.src;
+      Array.from(
+        node.querySelectorAll(
+          this.selectors.messageAuthorBadge
+        ) as NodeListOf<HTMLImageElement>
+      ).map((img) => img.src)
+    
+    )
   }
 }
