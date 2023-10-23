@@ -1,7 +1,7 @@
 import fastify, {
-    FastifyInstance,
-    FastifyReply,
-    FastifyRequest,
+  FastifyInstance,
+  FastifyReply,
+  FastifyRequest,
 } from "fastify";
 import cors from "@fastify/cors";
 import fs from "fs";
@@ -14,7 +14,7 @@ export interface IMessage {
     content: string;
     emojis: string[];
     author: string;
-    badge: string;
+    badges: string[];
     authorColor: string;
 }
 
@@ -24,7 +24,7 @@ const savedMessages: IMessage[] = [];
 const userColors: { [key: string]: string } = {};
 
 server.register(cors, {
-    origin: true,
+  origin: true,
 });
 
 server.post(
@@ -42,7 +42,7 @@ server.post(
                 content: "Chat reload",
                 author: "System",
                 emojis: [],
-                badge: "",
+                badges: [],
                 authorColor: "text-indigo-500",
             });
         }
@@ -61,36 +61,36 @@ server.post(
 );
 
 server.get("/api/messages", async (_: FastifyRequest, reply: FastifyReply) => {
-    reply.send(messages);
+  reply.send(messages);
 });
 
 server.post(
-    "/api/save-message",
-    async (request: FastifyRequest, reply: FastifyReply) => {
-        const message = request.body as IMessage;
-        savedMessages.push(message);
+  "/api/save-message",
+  async (request: FastifyRequest, reply: FastifyReply) => {
+    const message = request.body as IMessage;
+    savedMessages.push(message);
 
-        fs.writeFile("messages.json", JSON.stringify(savedMessages), (err) => {
-            if (err) {
-                console.log(err);
-            }
-        });
+    fs.writeFile("messages.json", JSON.stringify(savedMessages), (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
 
-        reply.send(savedMessages);
-    }
+    reply.send(savedMessages);
+  }
 );
 
 const start = async () => {
-    try {
-        await server.listen({
-            port: 3000,
-            host: "::",
-        });
-        server.log.info(`Server listening on http://localhost:3000/`);
-    } catch (err) {
-        server.log.error(err);
-        process.exit(1);
-    }
+  try {
+    await server.listen({
+      port: 3000,
+      host: "::",
+    });
+    server.log.info(`Server listening on http://localhost:3000/`);
+  } catch (err) {
+    server.log.error(err);
+    process.exit(1);
+  }
 };
 
 start();

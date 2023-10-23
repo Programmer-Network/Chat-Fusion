@@ -4,7 +4,7 @@ export interface IDOMUtils {
     getMessageText(node: Element): string;
     getMessageEmojis(node: Element): string[];
     getMessageAuthor(node: Element): string;
-    getMessageBadges(node: Element): string;
+    getMessageBadges(node: Element): string[];
 }
 
 export interface IDateTimeUtils {
@@ -40,5 +40,5 @@ export interface IMessage {
     content: string;
     emojis: string[];
     author: string;
-    badge: string;
+    badges: string[];
 }

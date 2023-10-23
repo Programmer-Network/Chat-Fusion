@@ -11,7 +11,7 @@ export const Message: FC<{
     onAction: (action: string, message: unknown) => void;
     focusedMessage: IMessage | null;
 }> = ({ message, focusedMessage, onMessageClick, onAction, filter }) => {
-    const { content, author } = message;
+    const { content, author, badges } = message;
     const [hoveredId, setHoveredId] = useState<string>("");
 
     const handleSaveMessage = (message: IMessage) => {
@@ -59,6 +59,16 @@ export const Message: FC<{
                         }
                     )}
                 >
+                    <div className="flex gap-1 items-center">
+                        {badges?.map((badge, index) => (
+                            <img
+                                key={index}
+                                className="w-7 h-7"
+                                src={badge}
+                                alt={badge}
+                            />
+                        ))}
+                    </div>
                     {author}
                     {isHovered && (
                         <div className="flex gap-1 items-center">
