@@ -7,6 +7,8 @@ import cors from "@fastify/cors";
 import fs from "fs";
 import { getRandomHexColor } from "./utils";
 
+const a = 22;
+
 export interface IMessage {
     sessionId: string;
     id: string;
