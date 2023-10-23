@@ -1,12 +1,10 @@
-let active = false;
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
     if (request.type !== "badge") {
         return;
     }
 
     setBadgeStatus(request.status);
-    sendResponse({ status: active });
+    sendResponse({ status: request.status });
 });
 
 const setBadgeStatus = (status: boolean) => {

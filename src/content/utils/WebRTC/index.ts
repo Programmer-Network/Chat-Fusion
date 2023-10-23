@@ -60,7 +60,7 @@ export default class WebRTCUtils {
      * @returns {Promise<RTCDataChannel>} - A promise that resolves to an initialized RTCDataChannel.
      */
     async initWebRTCConnection(): Promise<RTCDataChannel> {
-        return new Promise(async (resolve, reject) => {
+        return new Promise((resolve, reject) => {
             try {
                 const local = new RTCPeerConnection();
                 const remote = new RTCPeerConnection();
@@ -69,7 +69,7 @@ export default class WebRTCUtils {
                 sendChannel.onopen = this.handleOpen;
                 sendChannel.onmessage = this.handleMessage;
                 sendChannel.onclose = this.handleClose;
-                sendChannel.onopen = (e) => {
+                sendChannel.onopen = () => {
                     sendChannel.send("CONNECTED");
                 };
 
@@ -95,8 +95,8 @@ export default class WebRTCUtils {
                     resolve(channel);
                 };
 
-                await this.setLocalConnection(local, remote);
-                await this.setRemoteConnection(local, remote);
+                this.setLocalConnection(local, remote);
+                this.setRemoteConnection(local, remote);
             } catch (error) {
                 reject(error);
             }

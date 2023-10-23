@@ -4,14 +4,46 @@
     "scripts": {
         "build": "vite build && cpx ./src/popup/*.{svg,png,html} dist",
         "build-server": "tsc --target ES2018 --module CommonJS --outDir ./api --strict --esModuleInterop api/server.ts",
-        "server-dev": "nodemon --watch 'api/server.ts' --exec \"tsc --target ES2018 --module CommonJS --outDir ./api --strict --esModuleInterop api/server.ts && node ./api/server.js\""
+        "server-dev": "nodemon --watch 'api/server.ts' --exec \"tsc --target ES2018 --module CommonJS --outDir ./api --strict --esModuleInterop api/server.ts && node ./api/server.js\"",
+        "lint": "eslint 'src/**/*.ts' 'api/**/*.ts' 'chat/**/*.{ts,tsx}' --quiet",
+        "format": "prettier --write '**/*.{ts,json}'",
+        "prepare": "husky install"
+    },
+    "lint-staged": {
+        "src/**/*.{ts}": [
+            "eslint --fix",
+            "prettier --write"
+        ],
+        "api/**/*.{ts}": [
+            "eslint --fix",
+            "prettier --write"
+        ],
+        "chat/**/*.{ts,tsx,html,svg}": [
+            "eslint --fix",
+            "prettier --write"
+        ],
+        "**/*.{json}": [
+            "prettier --write"
+        ]
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
     },
     "devDependencies": {
         "@faker-js/faker": "^8.2.0",
         "@types/chrome": "^0.0.248",
         "@types/node": "^20.8.7",
+        "@typescript-eslint/eslint-plugin": "^6.9.0",
+        "@typescript-eslint/parser": "^6.9.0",
         "cpx": "^1.5.0",
+        "eslint": "^8.52.0",
+        "eslint-config-prettier": "^9.0.0",
+        "eslint-plugin-prettier": "^5.0.1",
         "faker": "@faker-js/faker",
+        "husky": "^8.0.3",
+        "lint-staged": "^15.0.2",
         "nodemon": "^2.0.15",
         "typescript": "^5.2.2",
         "vite": "^4.5.0"
