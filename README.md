@@ -1,4 +1,4 @@
-# Chat Fusion
+# Chat Fusion - Unified Chat For Multistreaming
 
 _Support this project by buying me a coffee on_ **[Patreon](https://patreon.com/programmer_network?utm_medium=clipboard_copy&utm_source=copyLink&utm_campaign=creatorshare_creator&utm_content=join_link)**
 
