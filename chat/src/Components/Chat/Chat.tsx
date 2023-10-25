@@ -5,6 +5,7 @@ import classNames from "classnames";
 import { ReloadIcon } from "../../assets/Icons/Reload";
 import { SearchDialog } from "../SearchDialog";
 import Fuse from "fuse.js";
+import { NoChatResultIllustration } from "../../assets/Illustrations/NoChatResult";
 
 export const Chat: FC<{
     messages: IMessage[];
@@ -65,9 +66,16 @@ export const Chat: FC<{
                             focusedMessage,
                     })}
                 >
-                    {messagesToRender.map(
-                        (message: IMessage, index: number) => {
-                            return (
+                    {messagesToRender.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center text-center py-4 text-3xl text-gray-300">
+                            It's quiet... too quiet. Try another search?
+                            <div className="mt-12">
+                                <NoChatResultIllustration />
+                            </div>
+                        </div>
+                    ) : (
+                        messagesToRender.map(
+                            (message: IMessage, index: number) => (
                                 <Message
                                     key={index}
                                     message={message}
@@ -76,8 +84,8 @@ export const Chat: FC<{
                                     onMessageClick={handleFocusMessage}
                                     onAction={onAction}
                                 />
-                            );
-                        }
+                            )
+                        )
                     )}
                     <div ref={messagesEndRef}></div>
                 </div>
