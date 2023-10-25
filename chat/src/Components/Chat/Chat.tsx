@@ -3,6 +3,8 @@ import { IMessage } from "../../types";
 import { Message } from "../Message";
 import classNames from "classnames";
 import { ReloadIcon } from "../../assets/Icons/Reload";
+import { SearchDialog } from "../SearchDialog";
+import Fuse from "fuse.js";
 
 export const Chat: FC<{
     messages: IMessage[];
@@ -13,6 +15,28 @@ export const Chat: FC<{
 }> = ({ messages, focusedMessage, setFocusedMessage, onAction, filter }) => {
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const [autoScroll, setAutoScroll] = useState<boolean>(true);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filteredMessages, setFilteredMessages] =
+        useState<IMessage[]>(messages);
+    const messagesToRender = searchTerm.trim() ? filteredMessages : messages;
+
+    // This function is called whenever the search term changes in the SearchDialog
+    const handleSearchChange = (newSearchTerm: string) => {
+        setSearchTerm(newSearchTerm);
+
+        // Fuse.js options; adjust as needed
+        const options = {
+            keys: ["content", "author", "platform"],
+            threshold: 0.4,
+            ignoreLocation: true,
+        };
+
+        const fuse = new Fuse(messages, options);
+        const result = fuse.search(newSearchTerm);
+
+        const matches = result.map(({ item }) => item); // Extract the matched items
+        setFilteredMessages(matches); // Set filtered messages
+    };
 
     const handleFocusMessage = (message: IMessage) => {
         setFocusedMessage(message.id === focusedMessage?.id ? null : message);
@@ -41,18 +65,20 @@ export const Chat: FC<{
                             focusedMessage,
                     })}
                 >
-                    {messages.map((message: IMessage, index: number) => {
-                        return (
-                            <Message
-                                key={index}
-                                message={message}
-                                filter={filter}
-                                focusedMessage={focusedMessage}
-                                onMessageClick={handleFocusMessage}
-                                onAction={onAction}
-                            />
-                        );
-                    })}
+                    {messagesToRender.map(
+                        (message: IMessage, index: number) => {
+                            return (
+                                <Message
+                                    key={index}
+                                    message={message}
+                                    filter={filter}
+                                    focusedMessage={focusedMessage}
+                                    onMessageClick={handleFocusMessage}
+                                    onAction={onAction}
+                                />
+                            );
+                        }
+                    )}
                     <div ref={messagesEndRef}></div>
                 </div>
             </div>
@@ -69,6 +95,10 @@ export const Chat: FC<{
                     />
                 </div>
             )}
+            <SearchDialog
+                onSearchChange={handleSearchChange}
+                searchTerm={searchTerm}
+            />
         </>
     );
 };
