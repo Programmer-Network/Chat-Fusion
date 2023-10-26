@@ -1,13 +1,13 @@
 import { createContext, useEffect, useState } from "react";
 import { Chat } from "./Components/Chat";
 import { useMessageListener } from "./Hooks/UseMessageListener";
-import { IMessage } from "./types";
 import classNames from "classnames";
+import { IMessage } from "../../types";
 
 export const LevelContext = createContext(null);
 
 function App() {
-    const messages = useMessageListener();
+    const { messages, sendMessage } = useMessageListener();
     const [focusedMessage, setFocusedMessage] = useState<IMessage | null>(null);
     const [filter, setFilter] = useState("");
     const [filtered, setFiltered] = useState<IMessage[]>([]);
@@ -17,7 +17,9 @@ function App() {
         setFiltered(
             filter
                 ? []
-                : messages.filter((message) => message.author === filter)
+                : messages.filter(
+                      (message: IMessage) => message.author === filter
+                  )
         );
     };
 
@@ -33,7 +35,9 @@ function App() {
             return;
         }
 
-        setFiltered(messages.filter((message) => message.author === filter));
+        setFiltered(
+            messages.filter((message: IMessage) => message.author === filter)
+        );
     }, [messages, filter]);
 
     return (
@@ -45,6 +49,7 @@ function App() {
         >
             <div>
                 <Chat
+                    sendMessage={sendMessage}
                     messages={filtered.length ? filtered : messages}
                     focusedMessage={focusedMessage}
                     setFocusedMessage={setFocusedMessage}

@@ -1,24 +1,13 @@
-import fastify, {
-    FastifyInstance,
-    FastifyReply,
-    FastifyRequest,
-} from "fastify";
-import cors from "@fastify/cors";
 import fs from "fs";
+import fastify, { FastifyReply, FastifyRequest } from "fastify";
+import FastifySocketIO from "fastify-socket.io";
+import cors from "@fastify/cors";
+import { Socket } from "socket.io";
+
 import { getRandomHexColor, parseLinks, saveLinks } from "./utils";
+import { CustomFastifyInstance, IMessage, SocketType } from "../types";
 
-export interface IMessage {
-    sessionId: string;
-    id: string;
-    platform: string;
-    content: string;
-    emojis: string[];
-    author: string;
-    badges: string[];
-    authorColor: string;
-}
-
-const server: FastifyInstance = fastify({ logger: true });
+const server = fastify({ logger: true }) as CustomFastifyInstance;
 const messages: IMessage[] = [];
 const savedMessages: IMessage[] = [];
 const userColors: { [key: string]: string } = {};
@@ -27,43 +16,12 @@ server.register(cors, {
     origin: true,
 });
 
-server.post(
-    "/api/messages",
-    async (request: FastifyRequest, reply: FastifyReply) => {
-        const message = request.body as IMessage;
-        if (
-            messages.length > 0 &&
-            messages[messages.length - 1].sessionId !== message.sessionId
-        ) {
-            messages.push({
-                sessionId: message.sessionId,
-                id: Math.random().toString(36).substr(2, 9),
-                platform: message.platform,
-                content: "Chat reload",
-                author: "System",
-                emojis: [],
-                badges: [],
-                authorColor: "text-indigo-500",
-            });
-        }
-
-        if (!userColors[message.author]) {
-            userColors[message.author] = getRandomHexColor();
-        }
-
-        const links = parseLinks(message.content);
-        if (links.length > 0) {
-            await saveLinks(links);
-        }
-
-        messages.push({
-            ...message,
-            authorColor: userColors[message.author],
-        });
-
-        reply.code(201).send();
-    }
-);
+server.register(FastifySocketIO, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+    },
+});
 
 server.get("/api/messages", async (_: FastifyRequest, reply: FastifyReply) => {
     reply.send(messages);
@@ -84,6 +42,46 @@ server.post(
         reply.send(savedMessages);
     }
 );
+
+let reactSocket: Socket | null = null;
+let extensionSocket: Socket | null = null;
+
+server.ready((serverError) => {
+    if (serverError) {
+        console.log(serverError);
+        process.exit(1);
+    }
+
+    server.io?.on("connection", (socket: Socket) => {
+        socket.on("register", (type) => {
+            if (type === SocketType.REACT) {
+                reactSocket = socket;
+            } else if (type === SocketType.EXTENSION) {
+                extensionSocket = socket;
+            }
+        });
+
+        socket.on("message", async (message) => {
+            if (socket === reactSocket) {
+                extensionSocket?.emit("message", message);
+            } else if (socket === extensionSocket) {
+                if (!userColors[message.author]) {
+                    userColors[message.author] = getRandomHexColor();
+                }
+
+                const links = parseLinks(message.content);
+                if (links.length > 0) {
+                    await saveLinks(links);
+                }
+
+                reactSocket?.emit("message", {
+                    ...message,
+                    authorColor: userColors[message.author],
+                });
+            }
+        });
+    });
+});
 
 const start = async () => {
     try {

@@ -7,10 +7,15 @@
         "default_title": "Chat Fusion"
     },
     "version": "1.0",
-    "host_permissions": ["http://*/*", "https://*/*"],
+    "permissions": ["webRequest", "tabs"],
+    "minimum_chrome_version": "116",
     "content_scripts": [
         {
-            "matches": ["http://*/*", "https://*/*"],
+            "matches": [
+                "*://*.kick.com/*",
+                "*://*.twitch.tv/*",
+                "*://*.youtube.com/*"
+            ],
             "js": ["./dist/content.js"]
         }
     ],

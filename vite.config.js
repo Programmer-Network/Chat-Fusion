@@ -4,11 +4,11 @@ export default defineConfig({
     build: {
         rollupOptions: {
             input: {
-                background: "src/background/index.ts", // Entry point for background script
-                content: "src/content/index.ts", // Entry point for content script
+                background: "chrome-extension/background-script/index.ts",
+                content: "chrome-extension/content-script/index.ts",
             },
             output: {
-                dir: "dist",
+                dir: "chrome-extension/dist",
                 format: "commonjs",
                 entryFileNames: `[name].js`,
             },

@@ -1,4 +1,4 @@
-dist
+chrome-extension/dist
 node_modules
 pnpm-lock.yaml
 .todo
@@ -6,3 +6,4 @@ pnpm-lock.yaml
 messages.json
 links.json
 api/*.js
+types.js

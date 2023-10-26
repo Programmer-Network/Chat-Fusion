@@ -1,11 +1,12 @@
 import { useEffect, useRef, FC, useState } from "react";
-import { IMessage } from "../../types";
 import { Message } from "../Message";
 import classNames from "classnames";
 import { ReloadIcon } from "../../assets/Icons/Reload";
+import { IMessage } from "../../../../types";
 
 export const Chat: FC<{
     messages: IMessage[];
+    sendMessage: (message: string) => void;
     focusedMessage: IMessage | null;
     setFocusedMessage: (message: IMessage | null) => void;
     onAction: (action: string, data: unknown) => void;
@@ -19,9 +20,11 @@ export const Chat: FC<{
     };
 
     const scrollToBottom = () => {
-        if (messagesEndRef.current) {
-            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+        if (!messagesEndRef.current) {
+            return;
         }
+
+        messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     };
 
     useEffect(() => {
@@ -56,6 +59,7 @@ export const Chat: FC<{
                     <div ref={messagesEndRef}></div>
                 </div>
             </div>
+
             {!focusedMessage && (
                 <div className="flex items-center justify-center pb-8">
                     <ReloadIcon

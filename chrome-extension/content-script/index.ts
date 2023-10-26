@@ -1,9 +1,9 @@
 import ChatLoader from "./Chat";
-import ChromeUtils from "./utils/ChromeUtils";
-import DOMUtils from "./utils/DOMUtils";
-import DateTimeUtils from "./utils/DateTime";
-import StringUtils from "./utils/StringUtils";
-import WebRTC from "./utils/WebRTC";
+import ChromeUtils from "../../utils/ChromeUtils";
+import DOMUtils from "../../utils/DOMUtils";
+import DateTimeUtils from "../../utils/DateTime";
+import StringUtils from "../../utils/StringUtils";
+import WebRTC from "../../utils/WebRTC";
 
 const domUtils = new DOMUtils();
 const webRTCUtils = new WebRTC();

@@ -38,8 +38,7 @@ export default class DOMUtils {
                 chatEmojis: ".emoji",
             },
             "kick.com": {
-                chatContainer:
-                    "#chatroom > div.relative.flex.grow.flex-col.overflow-hidden > div.overflow-y-scroll.py-3",
+                chatContainer: "#chatroom > div:nth-child(2) > div:first-child",
                 messageAuthor:
                     "#chatroom .chat-message-identity .chat-entry-username",
                 messageAuthorBadge: "",
@@ -76,7 +75,7 @@ export default class DOMUtils {
     }
 
     getMessageEmojis(node: Element) {
-        if (!this.selectors.messageText) {
+        if (!this.selectors.chatEmojis) {
             return [];
         }
 
