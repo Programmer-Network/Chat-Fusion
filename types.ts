@@ -8,11 +8,6 @@ export interface IDOMUtils {
     getMessageEmojis(node: Element): string[];
     getMessageAuthor(node: Element): string;
     getMessageBadges(node: Element): string[];
-    getMessageInputRef(): Element | null;
-    getChatSendButton(): Element | null;
-    insertMessageValue(value: string): void;
-    sendMessageToChat(message: string): void;
-    pressSendButton(): void;
 }
 
 export interface IDateTimeUtils {
