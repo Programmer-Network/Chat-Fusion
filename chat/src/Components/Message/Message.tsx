@@ -3,6 +3,22 @@ import { IMessage } from "../../types";
 import classNames from "classnames";
 import { SaveIcon } from "../../assets/Icons/Save";
 import { FilterToggle } from "../FilterToggle/FilterToggle";
+import { TwitchIcon } from "../../assets/Icons/Twitch";
+import { YouTubeIcon } from "../../assets/Icons/YouTube";
+import { KickIcon } from "../../assets/Icons/Kick";
+
+const getIcon = (platform: string) => {
+    switch (platform) {
+        case "twitch":
+            return <TwitchIcon className="text-indigo-700 w-8 mr-4" />;
+        case "youtube":
+            return <YouTubeIcon className="text-rose-700 w-9 mr-4" />;
+        case "kick":
+            return <KickIcon className="text-green-700 w-9 mr-4" />;
+        default:
+            return null;
+    }
+};
 
 export const Message: FC<{
     message: IMessage;
@@ -32,7 +48,7 @@ export const Message: FC<{
             onMouseOver={() => setHoveredId(message.id)}
             onMouseLeave={() => setHoveredId("")}
             className={classNames(
-                "flex flex-col cursor-pointer relative border-l-4 border-dotted border-gray-500 px-4 py-2",
+                "flex flex-col cursor-pointer relative border-gray-500 px-4 py-2",
                 {
                     "px-16 py-16 w-4/12 border-8 border-l-8":
                         focusedMessage && focusedMessage.id === message.id,
@@ -48,6 +64,7 @@ export const Message: FC<{
                     "flex-col !items-start !justify-start p-4": focusedMessage,
                 })}
             >
+                <span>{getIcon(message.platform)}</span>
                 <div
                     style={{ color: message.authorColor }}
                     className={classNames(
@@ -61,12 +78,7 @@ export const Message: FC<{
                 >
                     <div className="flex gap-1 items-center">
                         {badges?.map((badge, index) => (
-                            <img
-                                key={index}
-                                className="w-7 h-7"
-                                src={badge}
-                                alt={badge}
-                            />
+                            <img key={index} src={badge} alt={badge} />
                         ))}
                     </div>
                     {author}

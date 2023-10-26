@@ -1,11 +1,10 @@
-import HTTPMessageService from "./Services/Messages";
 import {
     IChromeUtils,
     IDOMUtils,
     IDateTimeUtils,
     IStringUtils,
     IWebRTCUtils,
-} from "./types";
+} from "../../types";
 
 export default class ChatLoader {
     private intervalId: ReturnType<typeof setInterval> | null = null;
@@ -29,6 +28,12 @@ export default class ChatLoader {
     }
 
     private initializeChat(chatElement: Element): void {
+        chrome.runtime.onMessage.addListener((message) => {
+            if (message.type === "CHAT_FUSION_SEND_MESSAGE") {
+                this.domUtils.sendMessageToChat(message.payload.content);
+            }
+        });
+
         const chatObserver = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (!mutation.addedNodes.length) {
@@ -45,15 +50,19 @@ export default class ChatLoader {
                         return;
                     }
 
-                    HTTPMessageService.postMessage({
-                        sessionId: this.sessionId,
-                        id: Math.random().toString(36).substr(2, 9),
-                        timestamp: this.dateTimeUtils.getFriendlyTime(),
-                        platform: this.stringUtils.getPlatformNameByHostname(),
-                        content,
-                        emojis: this.domUtils.getMessageEmojis(chatNode),
-                        author: this.domUtils.getMessageAuthor(chatNode),
-                        badges: this.domUtils.getMessageBadges(chatNode),
+                    chrome.runtime.sendMessage({
+                        type: "CHAT_FUSION_CONTENT_SCRAPED",
+                        payload: {
+                            sessionId: this.sessionId,
+                            id: Math.random().toString(36).substr(2, 9),
+                            timestamp: this.dateTimeUtils.getFriendlyTime(),
+                            platform:
+                                this.stringUtils.getPlatformNameByHostname(),
+                            content,
+                            emojis: this.domUtils.getMessageEmojis(chatNode),
+                            author: this.domUtils.getMessageAuthor(chatNode),
+                            badges: this.domUtils.getMessageBadges(chatNode),
+                        },
                     });
                 });
             });
@@ -73,6 +82,7 @@ export default class ChatLoader {
 
             if (this.isChatContainerAvailable()) {
                 const chat = this.domUtils.getChatContainer();
+
                 if (chat) {
                     this.initializeChat(chat);
                 }

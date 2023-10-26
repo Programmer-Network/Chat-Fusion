@@ -11,17 +11,9 @@ export default class WebRTCUtils {
         }, 800);
     }
 
-    private handleMessage(event: MessageEvent) {
-        console.log("Data channel message:", event.data);
-    }
-
-    private handleOpen(event: Event) {
-        console.log("Data channel is open", event);
-    }
-
-    private handleClose(event: Event) {
-        console.log("Data channel is closed", event);
-    }
+    private handleMessage() {}
+    private handleOpen() {}
+    private handleClose() {}
 
     /**
      * Set up the local RTCPeerConnection.
@@ -33,9 +25,11 @@ export default class WebRTCUtils {
         remote: RTCPeerConnection
     ): Promise<void> {
         await local.setLocalDescription(await local.createOffer());
+
         if (!local.localDescription) {
             throw new Error("Local description is null");
         }
+
         await remote.setRemoteDescription(local.localDescription);
     }
 
@@ -49,9 +43,11 @@ export default class WebRTCUtils {
         remote: RTCPeerConnection
     ): Promise<void> {
         await remote.setLocalDescription(await remote.createAnswer());
+
         if (!remote.localDescription) {
             throw new Error("Local description is null");
         }
+
         await local.setRemoteDescription(remote.localDescription);
     }
 
@@ -95,8 +91,9 @@ export default class WebRTCUtils {
                     resolve(channel);
                 };
 
-                this.setLocalConnection(local, remote);
-                this.setRemoteConnection(local, remote);
+                this.setLocalConnection(local, remote).then(() =>
+                    this.setRemoteConnection(local, remote)
+                );
             } catch (error) {
                 reject(error);
             }

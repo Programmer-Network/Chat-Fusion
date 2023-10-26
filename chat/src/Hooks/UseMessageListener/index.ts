@@ -1,49 +1,37 @@
 import { useEffect, useState } from "react";
-import { IMessage } from "../../types";
 import DummyMessageGenerator from "../../utils/faker";
+import SocketUtils from "../../../../utils/Socket";
+import { IMessage, SocketType } from "../../../../types";
 
-const useMessageListenerProd = (): IMessage[] => {
+const socket = new SocketUtils({
+    socketServer: "http://localhost:3000",
+    socketType: SocketType.REACT,
+});
+
+interface IUseMessageListener {
+    messages: IMessage[];
+    sendMessage: (message: string) => void;
+}
+
+const useMessageListenerProd = (): IUseMessageListener => {
     const [messages, setMessages] = useState<IMessage[]>([]);
-    let intervalId: ReturnType<typeof setInterval> | null = null;
-
-    const fetchMessages = async () => {
-        const res = await fetch("http://localhost:3000/api/messages");
-        const data = await res.json();
-        setMessages(data);
-    };
-
-    const handleVisibilityChange = () => {
-        if (document.hidden) {
-            if (intervalId) {
-                clearInterval(intervalId);
-                intervalId = null;
-            }
-        } else {
-            fetchMessages();
-            intervalId = setInterval(fetchMessages, 1000);
-        }
-    };
 
     useEffect(() => {
-        document.addEventListener("visibilitychange", handleVisibilityChange);
-        handleVisibilityChange();
+        socket.onMessage((message: IMessage) => {
+            setMessages([...messages, message]);
+        });
 
         return () => {
-            if (intervalId) {
-                clearInterval(intervalId);
-            }
-
-            document.removeEventListener(
-                "visibilitychange",
-                handleVisibilityChange
-            );
+            // TODO: fix
+            // Cleanup: disconnect the socket when the component is unmounted
+            // socket.disconnect();
         };
-    }, []);
+    }, [messages]);
 
-    return messages;
+    return { messages, sendMessage: socket.sendMessageFromUI };
 };
 
-const useMessageListenerDev = (): IMessage[] => {
+const useMessageListenerDev = (): IUseMessageListener => {
     const [messages, setMessages] = useState<IMessage[]>([]);
 
     useEffect(() => {
@@ -57,7 +45,7 @@ const useMessageListenerDev = (): IMessage[] => {
         };
     }, []);
 
-    return messages;
+    return { messages, sendMessage: () => {} };
 };
 
 export const useMessageListener =

@@ -1,4 +1,4 @@
-import { IMessage } from "../../types";
+import { IMessage } from "../../../types";
 
 export default class HTTPMessageService {
     public static postMessage(message: IMessage): Promise<Response> {

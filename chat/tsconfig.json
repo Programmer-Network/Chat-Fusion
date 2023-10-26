@@ -20,6 +20,15 @@
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true
     },
-    "include": ["src"],
+    "include": [
+        "../utils/DOMUtils",
+        "src",
+        "../chrome-extension",
+        "../utils/DateTime",
+        "../utils/ChromeUtils",
+        "../utils/StringUtils",
+        "../utils/Socket",
+        "../types.ts"
+    ],
     "references": [{ "path": "./tsconfig.node.json" }]
 }
